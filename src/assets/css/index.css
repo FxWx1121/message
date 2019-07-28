@@ -1,0 +1,17 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+ul,
+li {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+a {
+  /* text-decoration: none; */
+  text-decoration: none;
+  out-line: none;
+  color: white;
+}
