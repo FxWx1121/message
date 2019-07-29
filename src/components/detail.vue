@@ -10,7 +10,7 @@
       </a>
       <!-- <a  href="javascript:history.back(-1)"> -->
       <span>
-        <el-button type="primary">返回</el-button>
+        <el-button type="primary" @click="backed">返回</el-button>
       </span>
       <!-- </a> -->
     </div>
@@ -41,6 +41,9 @@ export default {
           window.console.log(res);
           this.goodinfo = res.data.data;
         });
+    },
+    backed() {
+      this.$router.go(-1);
     }
   }
 };

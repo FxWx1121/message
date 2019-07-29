@@ -2,12 +2,11 @@
   <div class="recompose">
     <!-- 标题 -->
     <div class="tit">
-      <el-input class="wenzhang" placeholder="请输入文章标题" id="bba" v-model="input" clearable></el-input>
+      <el-input class="wenzhang" placeholder="请输入文章标题"  v-model="input" clearable></el-input>
       <!-- {{goodinfo.title}} -->
     </div>
     <!-- 富文本 -->
     <div id="editorElem" class="edit" ref="editor" style="text-align:left"></div>
-    <!-- <Button shape="circle" type="primary" v-on:click="getContent">submit</Button> -->
     <!-- 板块 -->
     <!-- <div class="plate">
       <span>添加板块：</span>
@@ -20,7 +19,7 @@
         ></el-option>
       </el-select>
     </div>-->
-    <!-- 封面图 -->
+    <!-- 封 -->
     <!-- <div class="fengmian">
       <span>文章封面图</span>
       <el-upload
@@ -71,6 +70,7 @@ export default {
           window.console.log(res);
           this.goodinfo = res.data.data;
           this.input = res.data.data.title;
+          window.console.log(this.input);
           this.fuwenben = res.data.data.content;
         });
     }
@@ -89,11 +89,12 @@ export default {
     };
     // 创建一个富文本编辑器
     this.editor.create();
-    this.editor.txt.html("lll");
+    // this.editor.txt.html("lll");
   },
   updated() {
     this.editor.txt.html(this.fuwenben);
      window.console.log(this.fuwenben);
+     
   }
 };
 </script>

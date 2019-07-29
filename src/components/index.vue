@@ -14,26 +14,57 @@
             unlink-panels
           ></el-date-picker>
           <!-- 按钮 -->
-          <el-button class="quick" type="primary" @click="updateType('1','http://www.winchains.net')" icon="el-icon-search">快讯</el-button>
-          <el-button class="bigv" type="primary" icon="el-icon-search">大V说</el-button>
+          <!-- 盈链快讯 -->
+          <el-button
+            class="quick"
+            type="primary"
+            @click="getList('1','http://www.winchains.net'),index=1"
+            icon="el-icon-search"
+          >快讯</el-button>
+          <!-- 盈链大V -->
+          <el-button
+            type="primary"
+            @click="getList('7','http://www.winchains.net'),index=1"
+            icon="el-icon-search"
+          >大V说</el-button>
+          <!-- 氢云链政策 -->
+          <el-button
+            class="bigv"
+            type="primary"
+            @click="getList('3','http://www.qingyunlian.com'),index=1"
+            icon="el-icon-search"
+          >政策</el-button>
+          <!-- 氢云链新闻 -->
           <el-button
             class="notice"
             type="primary"
             icon="el-icon-search"
-            @click="updateType('5')"
-          >搜公告</el-button>
-          <el-button class="new" type="primary" icon="el-icon-search" @click="updateType('4','http://www.qingyunlian.com')">搜新闻</el-button>
+            @click="getList('4','http://www.qingyunlian.com'),index=1"
+          >新闻</el-button>
+          <!-- 氢云链公告 -->
           <el-button
+            class="new"
+            type="primary"
+            icon="el-icon-search"
+            @click="getList('5','http://www.qingyunlian.com'),index=1"
+          >公告</el-button>
+          <!-- <el-button
             class="policy"
             type="primary"
             icon="el-icon-search"
-            @click="updateType('3','http://www.winchains.net')"
-          >搜政策</el-button>
-          <el-button class="ask" type="primary" icon="el-icon-search">问董秘</el-button>
+            @click="getList('3','http://www.winchains.net')"
+          >搜政策</el-button>-->
+          <!-- <el-button class="ask" type="primary" icon="el-icon-search" @click="index=2">问董秘</el-button> -->
+          <el-button
+            class="ask"
+            type="primary"
+            icon="el-icon-search"
+            @click="getList('6','http://www.qingyunlian.com'),index=2"
+          >问董秘</el-button>
         </div>
       </el-header>
       <el-main>
-        <div class="center">
+        <div class="center" v-show="index==1">
           <ul>
             <li class="centerlist" v-for="(item,index) in gettp" :key="index">
               <!-- 进入详情页 -->
@@ -45,7 +76,7 @@
                 <span>标签：相关企业</span>
                 <span>时间：{{item.addtime}}</span>
                 <!--原文页面 -->
-                <a :href="item.url">
+                <a :href="item.url" target="_Blank">
                   <span style="color:#4ea2f5">原文链接</span>
                 </a>
                 <span>来源：{{item.source}}</span>
@@ -56,6 +87,38 @@
               </div>
             </li>
           </ul>
+        </div>
+        <!-- 问董秘 -->
+        <div class="dongmi" v-show="index==2">
+          <div class="quiz">
+            <ul>
+              <li v-for="(item,i) in gettp" :key="i">
+                <div class="quize">
+                  <div class="quiz1">
+                    <span>
+                      <img src="../assets/image/wen.png" alt />
+                    </span>
+                    <span>提问</span>
+                    <span class="zuozhe">来自:{{item.question_author}}</span>
+                  </div>
+                  <div class="quiz2">问：{{item.question_content}}</div>
+                  <div class="quiz3">{{item.question_update_time}}</div>
+                  <div class="xian"></div>
+                </div>
+                <div class="replay">
+                  <div class="replay1">
+                    <span>
+                      <img src="../assets/image/da.png" alt />
+                    </span>
+                    <span>回答</span>
+                    <span class="zhe">来自: {{item.answer_author}}</span>
+                  </div>
+                  <div class="replay2">答：{{item.answer_content}}</div>
+                  <div class="replay3">{{item.answer_update_time}}</div>
+                </div>
+              </li>
+            </ul>
+          </div>
         </div>
       </el-main>
     </el-container>
@@ -77,35 +140,44 @@ export default {
       ],
       gettp: [],
       type: "1",
-      url:'http://www.winchains.net'
+      // 地址
+      url: "http://www.winchains.net",
+      // 索引
+      index: 1
     };
   },
   methods: {
-    // 快讯&Math.round(new Date(this.value1[0]) / 1000)
-    getList() {
+    // 快讯
+    getList(type, url) {
+      this.gettp = "";
       this.$axios
         .get(
-          `${this.url}/portal.php?mod=newdata&article_list=1&type=${
-            this.type
-          }&begin_time=${Math.round(
+          `${url}/portal.php?mod=newdata&article_list=1&type=${type}&begin_time=${Math.round(
             new Date(this.value1[0]) / 1000
           )}&end_time=${Math.round(new Date(this.value1[1]) / 1000)}`
         )
         .then(res => {
           window.console.log(res);
-          this.gettp = res.data.data;
+          if (res.data.data.length <= 0) {
+            this.$message({
+              message: "暂无数据",
+              center: true,
+              duration: 1500,
+              offset: 300,
+              type: "error"
+            });
+            // this.$router.push("/index");
+            // setTimeout(() => {
+            //   this.$router.push("/");
+            // }, 1000);
+          } else if (res.data.data.length > 0) {
+            this.gettp = res.data.data;
+          }
         });
-    },
-    updateType(value1,value2) {
-      this.type = value1;
-      this.url = value2;
-      this.getList();
-      window.console.log(this.url);
-      
     }
   },
   created() {
-    this.getList();
+    this.getList("1", "http://www.winchains.net");
   }
 };
 </script>
@@ -183,6 +255,100 @@ export default {
         font-family: PingFangSC-Regular;
         font-weight: 400;
         color: rgba(153, 153, 153, 1);
+      }
+    }
+  }
+}
+
+.dongmi {
+  .quiz {
+    background-color: #fff;
+    // height: 220px;
+    padding: 0px 450px;
+    line-height: 35px;
+    li {
+      padding-bottom: 50px;
+    }
+    .quize {
+      margin: 0 auto;
+      .quiz1 {
+        font-size: 18px;
+        font-family: MicrosoftYaHei-Bold;
+        font-weight: bold;
+        color: #646464;
+        display: flex;
+        align-items: center;
+        margin-left: 20px;
+        img {
+          width: 20px;
+          height: 20px;
+          vertical-align: middle;
+          margin-right: 10px;
+        }
+        .zuozhe {
+          margin-left: 300px;
+          font-size: 10px;
+          font-family: PingFangSC-Regular;
+          font-weight: 400;
+          color: #999999;
+        }
+      }
+      .quiz2 {
+        font-size: 14px;
+        font-family: MicrosoftYaHei;
+        font-weight: 400;
+        color: #646464;
+        margin-left: 20px;
+      }
+      .quiz3 {
+        font-size: 10px;
+        font-family: PingFangSC-Regular;
+        font-weight: 400;
+        color: #999999;
+        margin-left: 20px;
+      }
+      .xian {
+        // width: 100%;
+        height: 1px;
+        background-color: #ccc;
+      }
+    }
+    .replay {
+      .replay1 {
+        font-size: 18px;
+        font-family: MicrosoftYaHei-Bold;
+        font-weight: bold;
+        color: #646464;
+        display: flex;
+        align-items: center;
+        margin-left: 20px;
+        img {
+          width: 20px;
+          height: 20px;
+          vertical-align: middle;
+          margin-right: 10px;
+        }
+        .zhe {
+          margin-left: 300px;
+          font-size: 10px;
+          font-family: PingFangSC-Regular;
+          font-weight: 400;
+          color: #999999;
+        }
+      }
+      .replay2 {
+        font-size: 14px;
+        font-family: MicrosoftYaHei;
+        font-weight: 400;
+        color: #646464;
+        margin-left: 20px;
+      }
+      .replay3 {
+        font-size: 10px;
+        font-family: PingFangSC-Regular;
+        font-weight: 400;
+        color: #999999;
+        margin-left: 20px;
       }
     }
   }
