@@ -24,7 +24,7 @@ export default {
   name: "detail",
   data() {
     return {
-      goodinfo: []
+      goodinfo: [],
     };
   },
   created() {
@@ -33,13 +33,20 @@ export default {
   methods: {
     // 获取数据
     gotDetail() {
+      let dataCanshu = JSON.parse(localStorage.getItem('canshu'));
+      window.console.log(dataCanshu);
       this.$axios
         .get(
-          `http://www.winchains.net/portal.php?mod=newdata&edit_article=1&id=${this.$route.params.id}`
+          `${dataCanshu.url}/portal.php?mod=newdata&edit_article=1&id=${this.$route.params.id}&type=${dataCanshu.type}`
         )
         .then(res => {
           window.console.log(res);
           this.goodinfo = res.data.data;
+
+          // this.queryId = this.$route.params.id;
+          // window.console.log(this.queryId);
+          // let queryType = this.$route.params.type;
+          // window.console.log(queryType);
         });
     },
     backed() {

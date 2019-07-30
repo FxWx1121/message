@@ -7,6 +7,7 @@ import index from "./components/index.vue";
 import recompose from "./components/recompose.vue";
 import old from "./components/old.vue";
 import detail from "./components/detail.vue";
+import loading from "./components/loading.vue";
 
 // 规则
 
@@ -20,6 +21,7 @@ let routes = [
   },
   {
     path: "/recompose/:id",
+    name:"recompose",
     component: recompose
   },
   {
@@ -29,6 +31,10 @@ let routes = [
   {
     path: "/detail/:id",
     component: detail
+  },
+  {
+    path: "/loading",
+    component: loading
   },
 ];
 

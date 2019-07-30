@@ -2,7 +2,7 @@
   <div class="recompose">
     <!-- 标题 -->
     <div class="tit">
-      <el-input class="wenzhang" placeholder="请输入文章标题"  v-model="input" clearable></el-input>
+      <el-input class="wenzhang" placeholder="请输入文章标题" v-model="input" clearable></el-input>
       <!-- {{goodinfo.title}} -->
     </div>
     <!-- 富文本 -->
@@ -19,7 +19,7 @@
         ></el-option>
       </el-select>
     </div>-->
-    <!-- 封 -->
+    <!-- 封面-->
     <!-- <div class="fengmian">
       <span>文章封面图</span>
       <el-upload
@@ -29,13 +29,13 @@
       >
         <i class="el-icon-plus"></i>
       </el-upload>
-    </div> -->
+    </div>-->
     <!-- 发表-->
     <div class="box"></div>
     <div class="publish">
       <div></div>
       <div>
-        <el-button class="quick" type="primary">发表</el-button>
+        <el-button class="quick" type="primary" @click="preve">发表</el-button>
       </div>
     </div>
   </div>
@@ -50,7 +50,8 @@ export default {
       editorContent: "",
       goodinfo: [],
       input: "",
-      fuwenben: "lll"
+      fuwenben: "lll",
+      dataCanshu:undefined
     };
   },
   created() {
@@ -62,9 +63,12 @@ export default {
     },
     // 获取数据
     getDetail() {
+      let dataCanshu = JSON.parse(localStorage.getItem("canshu"));
+      this.dataCanshu = dataCanshu;
+      window.console.log(dataCanshu);
       this.$axios
         .get(
-          `http://www.winchains.net/portal.php?mod=newdata&edit_article=1&id=${this.$route.params.id}`
+          `${dataCanshu.url}/portal.php?mod=newdata&edit_article=1&id=${this.$route.params.id}&type=${dataCanshu.type}`
         )
         .then(res => {
           window.console.log(res);
@@ -72,6 +76,19 @@ export default {
           this.input = res.data.data.title;
           window.console.log(this.input);
           this.fuwenben = res.data.data.content;
+        });
+    },
+    preve() {
+      this.$axios
+        .post(`${this.dataCanshu.url}/portal.php?mod=newdata&add_article=1`, {
+          title: this.input,
+          content: this.fuwenben
+        })
+        .then(function(response) {
+          window.console.log(response);
+        })
+        .catch(function(error) {
+          window.console.log(error);
         });
     }
   },
@@ -93,8 +110,7 @@ export default {
   },
   updated() {
     this.editor.txt.html(this.fuwenben);
-     window.console.log(this.fuwenben);
-     
+    window.console.log(this.fuwenben);
   }
 };
 </script>

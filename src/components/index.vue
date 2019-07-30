@@ -19,48 +19,51 @@
             class="quick"
             type="primary"
             @click="getList('1','http://www.winchains.net'),index=1"
-            icon="el-icon-search"
-          >快讯</el-button>
-          <!-- 盈链大V -->
-          <el-button
-            type="primary"
-            @click="getList('7','http://www.winchains.net'),index=1"
-            icon="el-icon-search"
-          >大V说</el-button>
-          <!-- 氢云链政策 -->
+          >盈链快讯</el-button>
+          <!-- 盈链大V说 -->
+          <el-button type="primary" @click="getList('2','http://www.winchains.net'),index=1">盈链大V说</el-button>
+          <!-- 盈链董秘 -->
           <el-button
             class="bigv"
             type="primary"
-            @click="getList('3','http://www.qingyunlian.com'),index=1"
-            icon="el-icon-search"
-          >政策</el-button>
-          <!-- 氢云链新闻 -->
+            @click="getList('3','http://www.winchains.net'),index=2"
+          >盈链董秘</el-button>
+          <!-- 氢云链政策 -->
           <el-button
             class="notice"
             type="primary"
-            icon="el-icon-search"
             @click="getList('4','http://www.qingyunlian.com'),index=1"
-          >新闻</el-button>
-          <!-- 氢云链公告 -->
+          >氢云链政策</el-button>
+          <!-- 氢云链新闻 -->
           <el-button
             class="new"
             type="primary"
-            icon="el-icon-search"
             @click="getList('5','http://www.qingyunlian.com'),index=1"
-          >公告</el-button>
-          <!-- <el-button
-            class="policy"
-            type="primary"
-            icon="el-icon-search"
-            @click="getList('3','http://www.winchains.net')"
-          >搜政策</el-button>-->
-          <!-- <el-button class="ask" type="primary" icon="el-icon-search" @click="index=2">问董秘</el-button> -->
+          >氢云链新闻</el-button>
+          <!-- 氢云链董秘 -->
           <el-button
             class="ask"
             type="primary"
-            icon="el-icon-search"
             @click="getList('6','http://www.qingyunlian.com'),index=2"
-          >问董秘</el-button>
+          >氢云链董秘</el-button>
+          <!-- 氢云链公告 -->
+          <el-button
+            class="ask"
+            type="primary"
+            @click="getList('7','http://www.qingyunlian.com'),index=1"
+          >氢云链公告</el-button>
+          <!-- 氢云链快讯 -->
+          <el-button
+            class="ask"
+            type="primary"
+            @click="getList('8','http://www.qingyunlian.com'),index=1"
+          >氢云链快讯</el-button>
+          <!-- 氢云链大V说 -->
+          <el-button
+            class="ask"
+            type="primary"
+            @click="getList('9','http://www.qingyunlian.com'),index=1"
+          >氢云链大V说</el-button>
         </div>
       </el-header>
       <el-main>
@@ -69,6 +72,7 @@
             <li class="centerlist" v-for="(item,index) in gettp" :key="index">
               <!-- 进入详情页 -->
               <router-link :to="'/detail/'+item.id">
+              <!-- <router-link :to="{path:'/detail/'+item.id,params:{'type':type}}"> -->
                 <div class="title">{{item.title}}</div>
               </router-link>
               <div class="details" v-html="item.content"></div>
@@ -148,7 +152,9 @@ export default {
   },
   methods: {
     // 快讯
+    // loading: true,
     getList(type, url) {
+      this.type = type;
       this.gettp = "";
       this.$axios
         .get(
@@ -157,7 +163,9 @@ export default {
           )}&end_time=${Math.round(new Date(this.value1[1]) / 1000)}`
         )
         .then(res => {
-          window.console.log(res);
+          // window.console.log(res.config.url);
+          // window.console.log(autd);
+          // let autd=type
           if (res.data.data.length <= 0) {
             this.$message({
               message: "暂无数据",
@@ -166,14 +174,16 @@ export default {
               offset: 300,
               type: "error"
             });
-            // this.$router.push("/index");
-            // setTimeout(() => {
-            //   this.$router.push("/");
-            // }, 1000);
           } else if (res.data.data.length > 0) {
             this.gettp = res.data.data;
+            window.console.log(this.gettp);
           }
         });
+        let dataCanshu = {
+          type,
+          url
+        }
+        window.localStorage.setItem('canshu',JSON.stringify(dataCanshu));
     }
   },
   created() {
@@ -203,12 +213,12 @@ export default {
   height: 100%;
 }
 .time {
-  padding: 0 50px !important;
+  // padding: 0 50px !important;
   .quick {
-    margin-left: 100px;
+    margin-left: 10px;
   }
   .notice {
-    margin-left: 10px !important;
+    margin-left: 60px !important;
   }
   .policy {
     margin-left: 10px !important;
