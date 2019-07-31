@@ -5,7 +5,6 @@ Vue.use(VueRouter);
 // 导入组件
 import index from "./components/index.vue";
 import recompose from "./components/recompose.vue";
-import old from "./components/old.vue";
 import detail from "./components/detail.vue";
 import loading from "./components/loading.vue";
 
@@ -23,10 +22,6 @@ let routes = [
     path: "/recompose/:id",
     name:"recompose",
     component: recompose
-  },
-  {
-    path: "/old",
-    component: old
   },
   {
     path: "/detail/:id",

@@ -60,7 +60,7 @@
           >氢云链快讯</el-button>
           <!-- 氢云链大V说 -->
           <el-button
-            class="ask"
+            class="agh"
             type="primary"
             @click="getList('9','http://www.qingyunlian.com'),index=1"
           >氢云链大V说</el-button>
@@ -71,14 +71,16 @@
           <ul>
             <li class="centerlist" v-for="(item,index) in gettp" :key="index">
               <!-- 进入详情页 -->
+              <!-- <a href="" target="_Blank"> -->
               <router-link :to="'/detail/'+item.id">
-              <!-- <router-link :to="{path:'/detail/'+item.id,params:{'type':type}}"> -->
+                <!-- <router-link :to="{path:'/detail/'+item.id,params:{'type':type}}"> -->
                 <div class="title">{{item.title}}</div>
               </router-link>
+              <!-- </a> -->
               <div class="details" v-html="item.content"></div>
               <div class="mark">
                 <span>标签：相关企业</span>
-                <span>时间：{{item.addtime}}</span>
+                <span>时间：{{item.show_time}}</span>
                 <!--原文页面 -->
                 <a :href="item.url" target="_Blank">
                   <span style="color:#4ea2f5">原文链接</span>
@@ -152,7 +154,6 @@ export default {
   },
   methods: {
     // 快讯
-    // loading: true,
     getList(type, url) {
       this.type = type;
       this.gettp = "";
@@ -163,9 +164,6 @@ export default {
           )}&end_time=${Math.round(new Date(this.value1[1]) / 1000)}`
         )
         .then(res => {
-          // window.console.log(res.config.url);
-          // window.console.log(autd);
-          // let autd=type
           if (res.data.data.length <= 0) {
             this.$message({
               message: "暂无数据",
@@ -176,14 +174,14 @@ export default {
             });
           } else if (res.data.data.length > 0) {
             this.gettp = res.data.data;
-            window.console.log(this.gettp);
+            // window.console.log(this.gettp);
           }
         });
-        let dataCanshu = {
-          type,
-          url
-        }
-        window.localStorage.setItem('canshu',JSON.stringify(dataCanshu));
+      let dataCanshu = {
+        type,
+        url
+      };
+      window.localStorage.setItem("canshu", JSON.stringify(dataCanshu));
     }
   },
   created() {
@@ -200,20 +198,17 @@ export default {
   color: #333;
   line-height: 80px;
   height: 80px !important;
-  // padding: 0 200px !important;
 }
 
 .el-main {
   background-color: #e9eef3;
   color: #333;
-  // padding: 0px 200px !important;
 }
 
 .el-container {
   height: 100%;
 }
 .time {
-  // padding: 0 50px !important;
   .quick {
     margin-left: 10px;
   }

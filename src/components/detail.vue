@@ -5,14 +5,12 @@
     <div class="record">
       <span></span>
       <span>标签：产业资讯</span>
-      <a :href="goodinfo.url">
+      <a :href="goodinfo.url" target="_Blank">
         <span style="color:#4ea2f5">原文链接</span>
       </a>
-      <!-- <a  href="javascript:history.back(-1)"> -->
       <span>
         <el-button type="primary" @click="backed">返回</el-button>
       </span>
-      <!-- </a> -->
     </div>
     <!-- 内容 -->
     <div class="center" v-html="goodinfo.content"></div>
@@ -34,19 +32,14 @@ export default {
     // 获取数据
     gotDetail() {
       let dataCanshu = JSON.parse(localStorage.getItem('canshu'));
-      window.console.log(dataCanshu);
+      // window.console.log(dataCanshu);
       this.$axios
         .get(
           `${dataCanshu.url}/portal.php?mod=newdata&edit_article=1&id=${this.$route.params.id}&type=${dataCanshu.type}`
         )
         .then(res => {
-          window.console.log(res);
+          // window.console.log(res);
           this.goodinfo = res.data.data;
-
-          // this.queryId = this.$route.params.id;
-          // window.console.log(this.queryId);
-          // let queryType = this.$route.params.type;
-          // window.console.log(queryType);
         });
     },
     backed() {
